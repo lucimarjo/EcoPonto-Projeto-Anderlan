@@ -1,12 +1,11 @@
 <template>
   <div class="cadastro-page">
 
-    <!-- CONTEÚDO PRINCIPAL -->
     <main class="cadastro-main">
 
       <div class="cadastro-card">
 
-        <!-- LOGO DO ECOPONTO -->
+        <!-- LOGO -->
         <div class="cadastro-logo">
           <img
             src="../assets/logo-ecoponto.png"
@@ -15,7 +14,6 @@
 
           <h2>EcoPonto</h2>
         </div>
-
 
         <!-- TÍTULO -->
         <div class="cadastro-title">
@@ -31,9 +29,11 @@
 
         </div>
 
-
         <!-- FORMULÁRIO -->
-        <form class="cadastro-form">
+        <form
+          class="cadastro-form"
+          @submit.prevent="validarCadastro"
+        >
 
           <!-- NOME -->
           <div class="form-group">
@@ -43,17 +43,19 @@
             </label>
 
             <div class="input-container">
+
               <span class="input-icon">♙</span>
 
               <input
                 id="nome"
+                v-model="nome"
                 type="text"
                 placeholder="Digite seu nome completo"
               />
+
             </div>
 
           </div>
-
 
           <!-- E-MAIL -->
           <div class="form-group">
@@ -63,17 +65,19 @@
             </label>
 
             <div class="input-container">
+
               <span class="input-icon">✉</span>
 
               <input
                 id="email"
+                v-model="email"
                 type="email"
                 placeholder="Digite seu e-mail"
               />
+
             </div>
 
           </div>
-
 
           <!-- SENHA -->
           <div class="form-group">
@@ -83,17 +87,19 @@
             </label>
 
             <div class="input-container">
+
               <span class="input-icon">♙</span>
 
               <input
                 id="senha"
+                v-model="senha"
                 type="password"
                 placeholder="Digite sua senha"
               />
+
             </div>
 
           </div>
-
 
           <!-- CONFIRMAR SENHA -->
           <div class="form-group">
@@ -103,23 +109,26 @@
             </label>
 
             <div class="input-container">
+
               <span class="input-icon">♙</span>
 
               <input
                 id="confirmarSenha"
+                v-model="confirmarSenha"
                 type="password"
                 placeholder="Digite sua senha novamente"
               />
+
             </div>
 
           </div>
-
 
           <!-- TERMOS -->
           <div class="termos">
 
             <input
               id="termos"
+              v-model="termos"
               type="checkbox"
             />
 
@@ -131,6 +140,21 @@
 
           </div>
 
+          <!-- MENSAGEM DE ERRO -->
+          <div
+            v-if="erro"
+            class="mensagem erro"
+          >
+            {{ erro }}
+          </div>
+
+          <!-- MENSAGEM DE SUCESSO -->
+          <div
+            v-if="sucesso"
+            class="mensagem sucesso"
+          >
+            {{ sucesso }}
+          </div>
 
           <!-- BOTÃO -->
           <button
@@ -141,7 +165,6 @@
           </button>
 
         </form>
-
 
         <!-- LOGIN -->
         <div class="ja-tem-conta">
@@ -160,7 +183,6 @@
 
     </main>
 
-
     <!-- RODAPÉ -->
     <footer class="cadastro-footer">
 
@@ -174,6 +196,133 @@
 </template>
 
 
+<script setup>
+
+import { ref } from 'vue'
+
+
+/* =========================
+   CAMPOS DO FORMULÁRIO
+========================= */
+
+const nome = ref('')
+
+const email = ref('')
+
+const senha = ref('')
+
+const confirmarSenha = ref('')
+
+const termos = ref(false)
+
+
+/* =========================
+   MENSAGENS
+========================= */
+
+const erro = ref('')
+
+const sucesso = ref('')
+
+
+/* =========================
+   VALIDAÇÃO
+========================= */
+
+function validarCadastro() {
+
+  erro.value = ''
+
+  sucesso.value = ''
+
+
+  /* NOME */
+
+  if (!nome.value.trim()) {
+
+    erro.value = 'Digite seu nome completo.'
+
+    return
+  }
+
+
+  /* E-MAIL */
+
+  if (!email.value.trim()) {
+
+    erro.value = 'Digite seu e-mail.'
+
+    return
+  }
+
+
+  if (!email.value.includes('@')) {
+
+    erro.value = 'Digite um e-mail válido.'
+
+    return
+  }
+
+
+  /* SENHA */
+
+  if (!senha.value) {
+
+    erro.value = 'Digite uma senha.'
+
+    return
+  }
+
+
+  if (senha.value.length < 6) {
+
+    erro.value =
+      'A senha deve ter pelo menos 6 caracteres.'
+
+    return
+  }
+
+
+  /* CONFIRMAÇÃO */
+
+  if (!confirmarSenha.value) {
+
+    erro.value =
+      'Confirme sua senha.'
+
+    return
+  }
+
+
+  if (senha.value !== confirmarSenha.value) {
+
+    erro.value =
+      'As senhas não coincidem.'
+
+    return
+  }
+
+
+  /* TERMOS */
+
+  if (!termos.value) {
+
+    erro.value =
+      'Você precisa aceitar os termos de uso.'
+
+    return
+  }
+
+
+  /* SUCESSO */
+
+  sucesso.value =
+    'Cadastro preenchido corretamente!'
+}
+
+</script>
+
+
 <style scoped>
 
 /* =========================
@@ -181,9 +330,11 @@
 ========================= */
 
 .cadastro-page {
+
   min-height: 100vh;
 
   display: flex;
+
   flex-direction: column;
 
   background: #f2f9f3;
@@ -197,10 +348,13 @@
 ========================= */
 
 .cadastro-main {
+
   flex: 1;
 
   display: flex;
+
   justify-content: center;
+
   align-items: flex-start;
 
   padding: 45px 20px 30px;
@@ -212,7 +366,9 @@
 ========================= */
 
 .cadastro-card {
+
   width: 100%;
+
   max-width: 700px;
 
   padding: 42px 55px;
@@ -233,6 +389,7 @@
 ========================= */
 
 .cadastro-logo {
+
   display: flex;
 
   flex-direction: column;
@@ -245,7 +402,9 @@
 }
 
 .cadastro-logo img {
+
   width: 105px;
+
   height: 105px;
 
   object-fit: contain;
@@ -254,6 +413,7 @@
 }
 
 .cadastro-logo h2 {
+
   margin: 0;
 
   color: #168343;
@@ -271,12 +431,14 @@
 ========================= */
 
 .cadastro-title {
+
   text-align: center;
 
   margin-bottom: 32px;
 }
 
 .cadastro-title span {
+
   display: block;
 
   color: #18864a;
@@ -291,6 +453,7 @@
 }
 
 .cadastro-title h1 {
+
   margin: 0 0 12px;
 
   color: #174333;
@@ -305,6 +468,7 @@
 }
 
 .cadastro-title p {
+
   max-width: 560px;
 
   margin: 0 auto;
@@ -322,6 +486,7 @@
 ========================= */
 
 .cadastro-form {
+
   display: flex;
 
   flex-direction: column;
@@ -335,6 +500,7 @@
 ========================= */
 
 .form-group {
+
   display: flex;
 
   flex-direction: column;
@@ -343,6 +509,7 @@
 }
 
 .form-group label {
+
   color: #174b38;
 
   font-size: 19px;
@@ -351,9 +518,12 @@
 }
 
 
-/* CONTAINER DO INPUT */
+/* =========================
+   INPUT
+========================= */
 
 .input-container {
+
   display: flex;
 
   align-items: center;
@@ -372,6 +542,7 @@
 }
 
 .input-container:focus-within {
+
   border-color: #218c51;
 
   box-shadow:
@@ -382,6 +553,7 @@
 /* ÍCONE */
 
 .input-icon {
+
   width: 65px;
 
   display: flex;
@@ -398,9 +570,10 @@
 }
 
 
-/* INPUT */
+/* CAMPO */
 
 .input-container input {
+
   width: 100%;
 
   height: 63px;
@@ -419,6 +592,7 @@
 }
 
 .input-container input::placeholder {
+
   color: #8998a1;
 
   font-size: 18px;
@@ -430,6 +604,7 @@
 ========================= */
 
 .termos {
+
   display: flex;
 
   align-items: flex-start;
@@ -440,6 +615,7 @@
 }
 
 .termos input {
+
   width: 22px;
 
   height: 22px;
@@ -454,6 +630,7 @@
 }
 
 .termos label {
+
   color: #476258;
 
   font-size: 16px;
@@ -464,9 +641,52 @@
 }
 
 .termos strong {
+
   color: #168343;
 
   font-weight: 800;
+}
+
+
+/* =========================
+   MENSAGENS
+========================= */
+
+.mensagem {
+
+  padding: 14px 16px;
+
+  border-radius: 10px;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  line-height: 1.4;
+}
+
+
+/* ERRO */
+
+.mensagem.erro {
+
+  background: #fff1f1;
+
+  border: 1px solid #f0caca;
+
+  color: #b42318;
+}
+
+
+/* SUCESSO */
+
+.mensagem.sucesso {
+
+  background: #edf9f1;
+
+  border: 1px solid #bde3c9;
+
+  color: #18713b;
 }
 
 
@@ -475,6 +695,7 @@
 ========================= */
 
 .cadastro-button {
+
   width: 100%;
 
   min-height: 64px;
@@ -497,6 +718,7 @@
 }
 
 .cadastro-button:hover {
+
   background: #137a41;
 
   transform: translateY(-1px);
@@ -506,6 +728,7 @@
 }
 
 .cadastro-button:active {
+
   transform: translateY(0);
 }
 
@@ -515,6 +738,7 @@
 ========================= */
 
 .ja-tem-conta {
+
   display: flex;
 
   align-items: center;
@@ -529,10 +753,12 @@
 }
 
 .ja-tem-conta span {
+
   color: #52685f;
 }
 
 .ja-tem-conta a {
+
   color: #168343;
 
   font-weight: 800;
@@ -541,6 +767,7 @@
 }
 
 .ja-tem-conta a:hover {
+
   text-decoration: underline;
 }
 
@@ -550,6 +777,7 @@
 ========================= */
 
 .cadastro-footer {
+
   padding: 22px 20px;
 
   text-align: center;
@@ -558,6 +786,7 @@
 }
 
 .cadastro-footer p {
+
   margin: 0;
 
   color: #668078;
@@ -573,76 +802,92 @@
 @media (max-width: 700px) {
 
   .cadastro-main {
+
     padding: 25px 15px 20px;
   }
 
   .cadastro-card {
+
     padding: 32px 22px;
 
     border-radius: 16px;
   }
 
   .cadastro-logo img {
+
     width: 80px;
 
     height: 80px;
   }
 
   .cadastro-logo h2 {
+
     font-size: 25px;
   }
 
   .cadastro-title span {
+
     font-size: 12px;
 
     letter-spacing: 1.5px;
   }
 
   .cadastro-title h1 {
+
     font-size: 35px;
   }
 
   .cadastro-title p {
+
     font-size: 16px;
   }
 
   .form-group label {
+
     font-size: 16px;
   }
 
   .input-container {
+
     min-height: 58px;
   }
 
   .input-container input {
+
     height: 56px;
 
     font-size: 16px;
   }
 
   .input-container input::placeholder {
+
     font-size: 15px;
   }
 
   .input-icon {
+
     width: 52px;
 
     font-size: 23px;
   }
 
   .termos label {
+
     font-size: 14px;
   }
 
   .cadastro-button {
+
     min-height: 58px;
 
     font-size: 18px;
   }
 
   .ja-tem-conta {
+
     font-size: 15px;
   }
+
 }
 
 </style>
