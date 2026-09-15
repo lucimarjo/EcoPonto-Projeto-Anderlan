@@ -226,7 +226,7 @@ const sucesso = ref('')
 
 
 /* =========================
-   VALIDAÇÃO
+   VALIDAÇÃO E CADASTRO
 ========================= */
 
 function validarCadastro() {
@@ -236,7 +236,7 @@ function validarCadastro() {
   sucesso.value = ''
 
 
-  /* NOME */
+  // Verifica o nome
 
   if (!nome.value.trim()) {
 
@@ -246,7 +246,7 @@ function validarCadastro() {
   }
 
 
-  /* E-MAIL */
+  // Verifica o e-mail
 
   if (!email.value.trim()) {
 
@@ -256,6 +256,8 @@ function validarCadastro() {
   }
 
 
+  // Verifica se o e-mail possui @
+
   if (!email.value.includes('@')) {
 
     erro.value = 'Digite um e-mail válido.'
@@ -264,7 +266,7 @@ function validarCadastro() {
   }
 
 
-  /* SENHA */
+  // Verifica a senha
 
   if (!senha.value) {
 
@@ -273,6 +275,8 @@ function validarCadastro() {
     return
   }
 
+
+  // Verifica tamanho da senha
 
   if (senha.value.length < 6) {
 
@@ -283,7 +287,7 @@ function validarCadastro() {
   }
 
 
-  /* CONFIRMAÇÃO */
+  // Verifica confirmação da senha
 
   if (!confirmarSenha.value) {
 
@@ -294,6 +298,8 @@ function validarCadastro() {
   }
 
 
+  // Compara as senhas
+
   if (senha.value !== confirmarSenha.value) {
 
     erro.value =
@@ -303,7 +309,7 @@ function validarCadastro() {
   }
 
 
-  /* TERMOS */
+  // Verifica os termos
 
   if (!termos.value) {
 
@@ -314,10 +320,23 @@ function validarCadastro() {
   }
 
 
-  /* SUCESSO */
+  // Cadastro realizado
 
   sucesso.value =
-    'Cadastro preenchido corretamente!'
+    'Cadastro realizado com sucesso!'
+
+
+  // Limpa os campos
+
+  nome.value = ''
+
+  email.value = ''
+
+  senha.value = ''
+
+  confirmarSenha.value = ''
+
+  termos.value = false
 }
 
 </script>
@@ -570,7 +589,7 @@ function validarCadastro() {
 }
 
 
-/* CAMPO */
+/* INPUT */
 
 .input-container input {
 
