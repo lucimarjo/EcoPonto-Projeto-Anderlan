@@ -1,8 +1,10 @@
 # 🌱 EcoPonto
 
-O **EcoPonto** é uma plataforma desenvolvida como projeto acadêmico do curso de **Ciência da Computação**.
+O **EcoPonto** é uma plataforma desenvolvida como projeto acadêmico do curso de Ciência da Computação para o professor Anderlan Henrique.
 
 O objetivo do projeto é facilitar o descarte correto de resíduos e melhorar a comunicação entre a população e os serviços responsáveis pela coleta e limpeza da cidade.
+
+[**Site do projeto**](https://sites.google.com/view/ecoponto-projeto/in%C3%ADcio?authuser=0 "Site do EcoPonto") ♻️
 
 ## 🎯 Objetivo
 
@@ -21,47 +23,93 @@ O EcoPonto terá as seguintes funcionalidades:
 - ♻️ Informações sobre descarte correto de resíduos;
 - 🚛 Informações relacionadas à coleta de resíduos.
 
-## 🖥️ Front-end
+## Tecnologias
+
+Terá duas versões da aplicação, a versão **Mobile** e a versão **Web**
+
+### 🖥️ Front-end Web
 
 O desenvolvimento do Front-end será realizado utilizando:
 
 - **Vue.js**
 - **JavaScript**
-- **Vite**
-- **HTML**
-- **CSS**
 
-A escolha do Vue.js segue a orientação da atividade acadêmica, que solicita o uso de **Angular ou Vue** para o Front-end.
+### 📱 Front-end Mobile
 
-## 🗄️ Banco de dados
+Responsável pela interface e interação do usuário no aplicativo do projeto, usando:
 
-O projeto utilizará um banco de dados **NoSQL**.
+- **Kotlin**
+- **Jetpack Compose**
+
+### ⚙️ Back-end
+
+O back-end foi dividido em duas que se unirão para tornarem-se uma única API. São elas:
+
+#### 📍 Python
+
+Responsável por:
+
+- Microsserviço de geoprocessamento;
+
+- Integração direta com as APIs do _OPenStreetMap_.
+
+Utiliza FastAPI para comunicar com a API.
+
+#### 🔒 Java
+
+Responsável por:
+
+- Gerenciar o banco de dados;
+- Regras de negócio;
+- Manusear Usuários, denúncias e horários de caminhões;
+- Autenticação de segurança.
+
+Usa SpringBoot como Framework.
+
+### 🗄️ Banco de dados
 
 A integração com a API e o banco de dados será realizada posteriormente. Neste momento, o desenvolvimento está concentrado na construção das interfaces e funcionalidades do Front-end.
+O projeto utiliza dois banco de dados um SQL, PostgreSQL e NoSQL, MongoDB.
+
+#### 🙍 PostgreSQL
+
+Cuida dos:
+
+1. Usuários;
+2. Denúncias;
+3. Horários e calendários dos caminhões.
+
+#### 🔔 MongoDB
+
+Responsável por:
+
+1. Notificações;
+2. Informações complementares das denúncias.
 
 ## 📂 Estrutura do projeto
 
 A estrutura principal do projeto será organizada da seguinte maneira:
 
 ```text
-EcoPonto-Vue/
+EcoPonto-Projeto-Anderlan/
+│
+├── .vscode/
 │
 ├── public/
 │
-├── src/
-│   ├── assets/
-│   │   └── logo-ecoponto.png
-│   │
-│   ├── components/
-│   │
-│   ├── views/
-│   │
-│   ├── App.vue
-│   ├── main.js
-│   └── style.css
+├── src/                      # Código-fonte da aplicação
+│   ├── assets/               # Imagens, logotipos e outros recursos
+│   ├── components/           # Componentes reutilizáveis da interface
+│   ├── views/                # Telas e páginas da aplicação
+│   ├── App.vue               # Componente principal da aplicação
+│   ├── main.js               # Ponto de entrada da aplicação
+│   └── style.css             # Estilos globais
 │
 ├── .gitignore
-├── index.html
+├── eslint.config.js
+├── index.html                # Página HTML principal
 ├── package.json
 ├── package-lock.json
-└── vite.config.js
+├── vite.config.js
+└── README.md                 # Documentação do projeto
+```
