@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Arquivo que declara informações essenciais para o Android reconhecer e iniciar o aplicativo. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Configura nome, ícones, tema e opções gerais do aplicativo. -->
+    <application
+        android:allowBackup="false"
+        android:label="EcoPonto"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.EcoPonto"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round">
+
+        <!-- Activity principal: ponto de entrada da interface Android. -->
+        <activity
+            android:name="br.com.ecoponto.MainActivity"
+            android:exported="true">
+
+            <!-- Define esta Activity como a tela aberta pelo ícone do aplicativo. -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+    </application>
+
+</manifest>

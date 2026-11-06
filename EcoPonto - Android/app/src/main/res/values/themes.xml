@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Cores usadas pelo tema nativo da janela e pelas barras do sistema. -->
+
+    <color name="ecoponto_green">#064D24</color>
+    <color name="ecoponto_white">#FFFFFF</color>
+
+    <!-- Tema aplicado antes e durante a inicialização da Activity. -->
+    <style name="Theme.EcoPonto" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">@color/ecoponto_green</item>
+        <item name="android:windowBackground">@color/ecoponto_green</item>
+        <item name="android:statusBarColor">@color/ecoponto_green</item>
+        <item name="android:navigationBarColor">@color/ecoponto_green</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+</resources>

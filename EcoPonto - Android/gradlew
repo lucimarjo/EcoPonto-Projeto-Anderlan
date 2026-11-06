@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Small project bootstrapper: downloads the official Gradle distribution on first run.
+set -euo pipefail
+VERSION="8.13"
+BASE="${GRADLE_USER_HOME:-$HOME/.gradle}/ecoponto-distributions"
+DIST="$BASE/gradle-$VERSION"
+ZIP="$BASE/gradle-$VERSION-bin.zip"
+if [[ ! -x "$DIST/bin/gradle" ]]; then
+  mkdir -p "$BASE"
+  if ! command -v curl >/dev/null 2>&1; then
+    echo "Este projeto precisa de curl para baixar o Gradle na primeira execução." >&2
+    exit 1
+  fi
+  echo "Baixando Gradle $VERSION da distribuição oficial..."
+  curl -fL "https://services.gradle.org/distributions/gradle-$VERSION-bin.zip" -o "$ZIP"
+  curl -fsSL "https://services.gradle.org/distributions/gradle-$VERSION-bin.zip.sha256" -o "$ZIP.sha256"
+  EXPECTED="$(awk '{print $1; exit}' "$ZIP.sha256" | tr -d '[:space:]')"
+  if command -v sha256sum >/dev/null 2>&1; then ACTUAL="$(sha256sum "$ZIP" | awk '{print $1}')"; else ACTUAL="$(shasum -a 256 "$ZIP" | awk '{print $1}')"; fi
+  if [[ "$EXPECTED" != "$ACTUAL" ]]; then echo "Falha na verificação SHA-256 do Gradle." >&2; rm -f "$ZIP"; exit 1; fi
+  unzip -q "$ZIP" -d "$BASE"
+fi
+exec "$DIST/bin/gradle" "$@"
