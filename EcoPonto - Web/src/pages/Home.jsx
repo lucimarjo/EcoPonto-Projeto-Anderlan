@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import Sidebar from "../components/Sidebar";
+import Topbar from "../components/Topbar";
 import "../App.css";
 
 const denuncias = [
@@ -49,7 +50,6 @@ function Home() {
 
   return (
     <div className="eco-dashboard">
-
       <Sidebar
         paginaAtiva={paginaAtiva}
         setPaginaAtiva={setPaginaAtiva}
@@ -58,51 +58,15 @@ function Home() {
       />
 
       <main className="eco-main">
-
-        <header className="eco-topbar">
-          <button
-            className="eco-mobile-menu"
-            onClick={() => setMenuAberto(!menuAberto)}
-            aria-label="Abrir menu"
-          >
-            <Icon name="menu" />
-          </button>
-
-          <div className="eco-breadcrumb">
-            <span>EcoPonto</span>
-            <span>/</span>
-            <strong>{paginaAtiva}</strong>
-          </div>
-
-          <div className="eco-topbar-actions">
-            <label className="eco-search">
-              <Icon name="search" />
-              <input
-                type="search"
-                placeholder="Pesquisar..."
-                value={pesquisa}
-                onChange={(event) => setPesquisa(event.target.value)}
-              />
-              <kbd>⌘ K</kbd>
-            </label>
-
-            <button className="eco-notification" aria-label="Notificações">
-              <Icon name="bell" />
-              <span />
-            </button>
-
-            <div className="eco-top-profile">
-              <div className="eco-avatar">AD</div>
-              <div>
-                <strong>Administrador</strong>
-                <span>Admin</span>
-              </div>
-            </div>
-          </div>
-        </header>
+        <Topbar
+          paginaAtiva={paginaAtiva}
+          pesquisa={pesquisa}
+          setPesquisa={setPesquisa}
+          menuAberto={menuAberto}
+          setMenuAberto={setMenuAberto}
+        />
 
         <div className="eco-content">
-
           <section className="eco-welcome">
             <div>
               <span className="eco-eyebrow">VISÃO GERAL</span>
@@ -123,7 +87,6 @@ function Home() {
           </section>
 
           <section className="eco-kpi-grid">
-
             <article className="eco-kpi-card">
               <div className="eco-kpi-top">
                 <span>Novas denúncias</span>
@@ -171,11 +134,9 @@ function Home() {
                 <span>redução no tempo médio</span>
               </div>
             </article>
-
           </section>
 
           <section className="eco-charts-grid">
-
             <article className="eco-panel eco-evolution">
               <div className="eco-panel-heading">
                 <div>
@@ -244,11 +205,9 @@ function Home() {
                 <div><i className="status-gray" /><span>Novas</span><strong>8%</strong></div>
               </div>
             </article>
-
           </section>
 
           <section className="eco-bottom-grid">
-
             <article className="eco-panel eco-recent">
               <div className="eco-panel-heading">
                 <div>
@@ -323,14 +282,12 @@ function Home() {
                 ))}
               </div>
             </article>
-
           </section>
 
           <footer className="eco-footer">
             <span>© 2026 EcoPonto — Sistema de Gestão Ambiental</span>
             <span>Juntos por uma cidade mais limpa <b>♥</b></span>
           </footer>
-
         </div>
       </main>
     </div>
