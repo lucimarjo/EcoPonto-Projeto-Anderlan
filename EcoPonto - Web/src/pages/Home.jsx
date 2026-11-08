@@ -1,450 +1,338 @@
+
+import { useState } from "react";
+import Sidebar from "../components/Sidebar";
 import "../App.css";
-import logoEcoPonto from "../assets/logo-ecoponto.png";
+
+const denuncias = [
+  { id: "DEN-001", local: "Centro — Rua Principal", categoria: "Descarte irregular", data: "06/11/2026", status: "Nova" },
+  { id: "DEN-002", local: "Bairro São José", categoria: "Acúmulo de lixo", data: "05/11/2026", status: "Em análise" },
+  { id: "DEN-003", local: "Praça da Matriz", categoria: "Entulho", data: "05/11/2026", status: "Resolvida" },
+  { id: "DEN-004", local: "Rua das Flores", categoria: "Descarte irregular", data: "04/11/2026", status: "Em análise" },
+];
+
+const atividades = [
+  { icon: "✓", titulo: "Denúncia resolvida", descricao: "DEN-003 foi marcada como resolvida.", tempo: "Há 15 minutos" },
+  { icon: "＋", titulo: "Nova denúncia recebida", descricao: "Uma nova ocorrência foi registrada.", tempo: "Há 42 minutos" },
+  { icon: "↻", titulo: "Denúncia em análise", descricao: "DEN-002 está sendo analisada.", tempo: "Há 1 hora" },
+];
+
+function Icon({ name }) {
+  const icons = {
+    dashboard: "▦",
+    map: "⌖",
+    list: "☷",
+    team: "♙",
+    settings: "⚙",
+    search: "⌕",
+    bell: "♧",
+    arrow: "↗",
+    clock: "◷",
+    check: "✓",
+    plus: "＋",
+    menu: "☰",
+  };
+
+  return <span className="eco-icon" aria-hidden="true">{icons[name] || "•"}</span>;
+}
 
 function Home() {
+  const [paginaAtiva, setPaginaAtiva] = useState("Dashboard");
+  const [periodo, setPeriodo] = useState("Últimos 7 dias");
+  const [pesquisa, setPesquisa] = useState("");
+  const [menuAberto, setMenuAberto] = useState(false);
+
+  const denunciasFiltradas = denuncias.filter((item) =>
+    `${item.id} ${item.local} ${item.categoria} ${item.status}`
+      .toLowerCase()
+      .includes(pesquisa.toLowerCase())
+  );
+
   return (
-    <div className="home">
+    <div className="eco-dashboard">
 
-      {/* CABEÇALHO */}
-      <header className="header">
-        <div className="header-container">
+      <Sidebar
+        paginaAtiva={paginaAtiva}
+        setPaginaAtiva={setPaginaAtiva}
+        menuAberto={menuAberto}
+        setMenuAberto={setMenuAberto}
+      />
 
-          <a href="/" className="logo">
-            <img src={logoEcoPonto} alt="Logo EcoPonto" />
+      <main className="eco-main">
+
+        <header className="eco-topbar">
+          <button
+            className="eco-mobile-menu"
+            onClick={() => setMenuAberto(!menuAberto)}
+            aria-label="Abrir menu"
+          >
+            <Icon name="menu" />
+          </button>
+
+          <div className="eco-breadcrumb">
             <span>EcoPonto</span>
-          </a>
-
-          <nav className="menu">
-            <a href="/" className="menu-active">
-              Início
-            </a>
-
-            <a href="/cadastro">
-              Cadastro
-            </a>
-
-            <a href="/denuncia">
-              Denúncias
-            </a>
-
-            <a href="/conta">
-              Minha conta
-            </a>
-          </nav>
-
-          <a href="/cadastro" className="header-button">
-            Criar conta
-          </a>
-
-        </div>
-      </header>
-
-
-      {/* HERO */}
-      <main>
-
-        <section className="hero">
-          <div className="hero-container">
-
-            <div className="hero-content">
-
-              <span className="hero-tag">
-                ♻️ Cuidando do meio ambiente
-              </span>
-
-              <h1>
-                Um lugar mais limpo
-                <span> começa com você.</span>
-              </h1>
-
-              <p>
-                O EcoPonto facilita o descarte correto de resíduos
-                e aproxima a população dos serviços de coleta.
-              </p>
-
-              <div className="hero-buttons">
-
-                <a href="/cadastro" className="button-primary">
-                  👤 Criar minha conta
-                </a>
-
-                <a href="/mapa" className="button-secondary">
-                  🗺️ Ver pontos de coleta
-                </a>
-
-              </div>
-
-            </div>
-
-          </div>
-        </section>
-
-
-        {/* FUNCIONALIDADES */}
-        <section className="features">
-
-          <div className="section-container">
-
-            <div className="section-title">
-
-              <span>O QUE VOCÊ PODE FAZER</span>
-
-              <h2>
-                Participe e ajude a cuidar
-                <br />
-                da nossa cidade
-              </h2>
-
-              <p>
-                Com o EcoPonto, você tem acesso a ferramentas
-                que ajudam a manter o ambiente mais limpo.
-              </p>
-
-            </div>
-
-
-            <div className="cards">
-
-              {/* CADASTRO */}
-              <div className="feature-card">
-
-                <div className="card-icon">
-                  👤
-                </div>
-
-                <h3>Cadastro</h3>
-
-                <p>
-                  Crie sua conta para acessar as funcionalidades
-                  do EcoPonto e participar da comunidade.
-                </p>
-
-                <a href="/cadastro">
-                  Fazer cadastro →
-                </a>
-
-              </div>
-
-
-              {/* MAPA */}
-              <div className="feature-card">
-
-                <div className="card-icon">
-                  🗺️
-                </div>
-
-                <h3>Mapa de coleta</h3>
-
-                <p>
-                  Consulte os pontos de coleta e encontre
-                  locais adequados para realizar o descarte.
-                </p>
-
-                <a href="/mapa">
-                  Explorar mapa →
-                </a>
-
-              </div>
-
-
-              {/* DENÚNCIA */}
-              <div className="feature-card">
-
-                <div className="card-icon">
-                  📝
-                </div>
-
-                <h3>Criar denúncia</h3>
-
-                <p>
-                  Encontrou um local com acúmulo de lixo?
-                  Registre uma denúncia e ajude a resolver o problema.
-                </p>
-
-                <a href="/denuncia">
-                  Criar denúncia →
-                </a>
-
-              </div>
-
-
-              {/* MINHAS DENÚNCIAS */}
-              <div className="feature-card">
-
-                <div className="card-icon">
-                  📋
-                </div>
-
-                <h3>Minhas denúncias</h3>
-
-                <p>
-                  Acompanhe as denúncias realizadas e
-                  consulte o andamento de cada solicitação.
-                </p>
-
-                <a href="/minhas-denuncias">
-                  Ver denúncias →
-                </a>
-
-              </div>
-
-
-              {/* CONTA */}
-              <div className="feature-card">
-
-                <div className="card-icon">
-                  ⚙️
-                </div>
-
-                <h3>Minha conta</h3>
-
-                <p>
-                  Gerencie seus dados pessoais e mantenha
-                  suas informações sempre atualizadas.
-                </p>
-
-                <a href="/conta">
-                  Acessar conta →
-                </a>
-
-              </div>
-
-            </div>
-
+            <span>/</span>
+            <strong>{paginaAtiva}</strong>
           </div>
 
-        </section>
-
-
-        {/* MAPA */}
-        <section className="map-section">
-
-          <div className="map-container">
-
-            <div className="map-content">
-
-              <span className="map-tag">
-                🗺️ PONTOS DE COLETA
-              </span>
-
-              <h2>
-                Encontre um ponto de coleta
-                perto de você.
-              </h2>
-
-              <p>
-                Consulte os locais disponíveis para descarte
-                correto de resíduos e contribua para uma cidade
-                mais limpa e sustentável.
-              </p>
-
-              <a href="/mapa" className="map-button">
-                Explorar mapa →
-              </a>
-
-            </div>
-
-
-            {/* REPRESENTAÇÃO DO MAPA */}
-            <div className="map-preview">
-
-              <div className="map-grid">
-
-                <div className="map-road road-1"></div>
-                <div className="map-road road-2"></div>
-                <div className="map-road road-3"></div>
-
-                <div className="map-location location-1">
-                  ♻️
-                </div>
-
-                <div className="map-location location-2">
-                  ♻️
-                </div>
-
-                <div className="map-location location-3">
-                  ♻️
-                </div>
-
-                <div className="map-location location-4">
-                  ♻️
-                </div>
-
-              </div>
-
-              <div className="map-label">
-                📍 Pontos de coleta
-              </div>
-
-            </div>
-
-          </div>
-
-        </section>
-
-
-        {/* SOBRE */}
-        <section className="about">
-
-          <div className="about-container">
-
-            <div className="about-content">
-
-              <span className="about-tag">
-                SOBRE O ECOPONTO
-              </span>
-
-              <h2>
-                Pequenas atitudes podem
-                gerar grandes mudanças.
-              </h2>
-
-              <p>
-                O EcoPonto foi desenvolvido para facilitar a
-                comunicação entre a população e os serviços
-                responsáveis pela coleta de resíduos.
-              </p>
-
-              <p>
-                A plataforma permite que os usuários encontrem
-                informações importantes, realizem denúncias de
-                locais com acúmulo de lixo e acompanhem suas
-                solicitações.
-              </p>
-
-              <div className="about-items">
-
-                <div>
-                  <strong>♻️</strong>
-                  <span>
-                    Descarte mais consciente
-                  </span>
-                </div>
-
-                <div>
-                  <strong>🌱</strong>
-                  <span>
-                    Cuidado com o meio ambiente
-                  </span>
-                </div>
-
-                <div>
-                  <strong>🤝</strong>
-                  <span>
-                    Participação da comunidade
-                  </span>
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </section>
-
-
-        {/* CTA */}
-        <section className="cta">
-
-          <div className="cta-container">
-
-            <div>
-
-              <span>
-                FAÇA PARTE DESSA MUDANÇA
-              </span>
-
-              <h2>
-                Juntos podemos construir
-                um lugar melhor.
-              </h2>
-
-              <p>
-                Crie sua conta e participe do EcoPonto.
-              </p>
-
-            </div>
-
-            <a href="/cadastro" className="cta-button">
-              Criar minha conta →
-            </a>
-
-          </div>
-
-        </section>
-
-      </main>
-
-
-      {/* RODAPÉ */}
-      <footer className="footer">
-
-        <div className="footer-container">
-
-          <div className="footer-brand">
-
-            <div className="footer-logo">
-
-              <img
-                src={logoEcoPonto}
-                alt="EcoPonto"
+          <div className="eco-topbar-actions">
+            <label className="eco-search">
+              <Icon name="search" />
+              <input
+                type="search"
+                placeholder="Pesquisar..."
+                value={pesquisa}
+                onChange={(event) => setPesquisa(event.target.value)}
               />
+              <kbd>⌘ K</kbd>
+            </label>
 
-              <span>
-                EcoPonto
-              </span>
+            <button className="eco-notification" aria-label="Notificações">
+              <Icon name="bell" />
+              <span />
+            </button>
 
+            <div className="eco-top-profile">
+              <div className="eco-avatar">AD</div>
+              <div>
+                <strong>Administrador</strong>
+                <span>Admin</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div className="eco-content">
+
+          <section className="eco-welcome">
+            <div>
+              <span className="eco-eyebrow">VISÃO GERAL</span>
+              <h1>{paginaAtiva === "Dashboard" ? "Central de Denúncias" : paginaAtiva}</h1>
+              <p>Acompanhe e gerencie as ocorrências ambientais da sua cidade.</p>
             </div>
 
-            <p>
-              Tecnologia e sustentabilidade
-              para uma cidade melhor.
-            </p>
+            <select
+              className="eco-period-select"
+              value={periodo}
+              onChange={(event) => setPeriodo(event.target.value)}
+              aria-label="Selecionar período"
+            >
+              <option>Últimos 7 dias</option>
+              <option>Últimos 30 dias</option>
+              <option>Últimos 90 dias</option>
+            </select>
+          </section>
 
-          </div>
+          <section className="eco-kpi-grid">
 
+            <article className="eco-kpi-card">
+              <div className="eco-kpi-top">
+                <span>Novas denúncias</span>
+                <div className="eco-kpi-icon green"><Icon name="plus" /></div>
+              </div>
+              <strong>128</strong>
+              <div className="eco-kpi-footer">
+                <span className="eco-positive">↑ 12,5%</span>
+                <span>em relação ao período anterior</span>
+              </div>
+            </article>
 
-          <div className="footer-links">
+            <article className="eco-kpi-card">
+              <div className="eco-kpi-top">
+                <span>Em análise</span>
+                <div className="eco-kpi-icon orange"><Icon name="clock" /></div>
+              </div>
+              <strong>36</strong>
+              <div className="eco-kpi-footer">
+                <span className="eco-neutral">Aguardando</span>
+                <span>providências da equipe</span>
+              </div>
+            </article>
 
-            <h4>Navegação</h4>
+            <article className="eco-kpi-card">
+              <div className="eco-kpi-top">
+                <span>Denúncias resolvidas</span>
+                <div className="eco-kpi-icon blue"><Icon name="check" /></div>
+              </div>
+              <strong>92</strong>
+              <div className="eco-kpi-footer">
+                <span className="eco-positive">↑ 8,2%</span>
+                <span>em relação ao período anterior</span>
+              </div>
+            </article>
 
-            <a href="/">Início</a>
-            <a href="/cadastro">Cadastro</a>
-            <a href="/mapa">Mapa</a>
-            <a href="/denuncia">Denúncias</a>
-            <a href="/conta">Minha conta</a>
+            <article className="eco-kpi-card">
+              <div className="eco-kpi-top">
+                <span>Tempo médio de resolução</span>
+                <div className="eco-kpi-icon purple"><Icon name="clock" /></div>
+              </div>
+              <strong>2,4 <small>dias</small></strong>
+              <div className="eco-kpi-footer">
+                <span className="eco-positive">↓ 15%</span>
+                <span>redução no tempo médio</span>
+              </div>
+            </article>
 
-          </div>
+          </section>
 
+          <section className="eco-charts-grid">
 
-          <div className="footer-links">
+            <article className="eco-panel eco-evolution">
+              <div className="eco-panel-heading">
+                <div>
+                  <h2>Visão geral das denúncias</h2>
+                  <p>Acompanhe a evolução das ocorrências.</p>
+                </div>
+                <span className="eco-chart-legend"><i /> Denúncias recebidas</span>
+              </div>
 
-            <h4>EcoPonto</h4>
+              <div className="eco-bar-chart">
+                <div className="eco-y-labels">
+                  <span>40</span>
+                  <span>30</span>
+                  <span>20</span>
+                  <span>10</span>
+                  <span>0</span>
+                </div>
 
-            <a href="/cadastro">
-              Criar conta
-            </a>
+                <div className="eco-chart-area">
+                  <div className="eco-chart-lines">
+                    {[1, 2, 3, 4, 5].map((line) => <span key={line} />)}
+                  </div>
 
-            <a href="/minhas-denuncias">
-              Minhas denúncias
-            </a>
+                  <div className="eco-bars">
+                    {[
+                      ["Seg", 42],
+                      ["Ter", 65],
+                      ["Qua", 52],
+                      ["Qui", 83],
+                      ["Sex", 62],
+                      ["Sáb", 95],
+                      ["Dom", 72],
+                    ].map(([dia, altura]) => (
+                      <div className="eco-bar-column" key={dia}>
+                        <div className="eco-bar-track">
+                          <div className="eco-bar" style={{ height: `${altura}%` }} />
+                        </div>
+                        <span>{dia}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </article>
 
-          </div>
+            <article className="eco-panel eco-distribution">
+              <div className="eco-panel-heading">
+                <div>
+                  <h2>Denúncias por status</h2>
+                  <p>Distribuição das ocorrências.</p>
+                </div>
+              </div>
+
+              <div className="eco-donut-area">
+                <div className="eco-donut">
+                  <div className="eco-donut-center">
+                    <strong>128</strong>
+                    <span>Total</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="eco-status-legend">
+                <div><i className="status-green" /><span>Resolvidas</span><strong>72%</strong></div>
+                <div><i className="status-orange" /><span>Em análise</span><strong>20%</strong></div>
+                <div><i className="status-gray" /><span>Novas</span><strong>8%</strong></div>
+              </div>
+            </article>
+
+          </section>
+
+          <section className="eco-bottom-grid">
+
+            <article className="eco-panel eco-recent">
+              <div className="eco-panel-heading">
+                <div>
+                  <h2>Denúncias recentes</h2>
+                  <p>Acompanhe as últimas ocorrências registradas.</p>
+                </div>
+                <button
+                  className="eco-text-button"
+                  onClick={() => setPaginaAtiva("Lista de denúncias")}
+                >
+                  Ver todas <Icon name="arrow" />
+                </button>
+              </div>
+
+              <div className="eco-table-wrapper">
+                <table className="eco-table">
+                  <thead>
+                    <tr>
+                      <th>IDENTIFICAÇÃO</th>
+                      <th>LOCAL</th>
+                      <th>CATEGORIA</th>
+                      <th>DATA</th>
+                      <th>STATUS</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {denunciasFiltradas.map((item) => (
+                      <tr key={item.id}>
+                        <td><strong className="eco-id">{item.id}</strong></td>
+                        <td>{item.local}</td>
+                        <td>{item.categoria}</td>
+                        <td>{item.data}</td>
+                        <td>
+                          <span className={`eco-status status-${item.status.toLowerCase().replace(" ", "-")}`}>
+                            {item.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+
+                    {denunciasFiltradas.length === 0 && (
+                      <tr>
+                        <td colSpan="5" className="eco-empty">
+                          Nenhuma denúncia encontrada.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </article>
+
+            <article className="eco-panel eco-activity">
+              <div className="eco-panel-heading">
+                <div>
+                  <h2>Atividades recentes</h2>
+                  <p>Últimas atualizações do sistema.</p>
+                </div>
+              </div>
+
+              <div className="eco-activity-list">
+                {atividades.map((atividade, index) => (
+                  <div className="eco-activity-item" key={index}>
+                    <div className="eco-activity-icon">{atividade.icon}</div>
+                    <div>
+                      <strong>{atividade.titulo}</strong>
+                      <p>{atividade.descricao}</p>
+                      <span>{atividade.tempo}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </article>
+
+          </section>
+
+          <footer className="eco-footer">
+            <span>© 2026 EcoPonto — Sistema de Gestão Ambiental</span>
+            <span>Juntos por uma cidade mais limpa <b>♥</b></span>
+          </footer>
 
         </div>
-
-
-        <div className="footer-bottom">
-
-          <p>
-            © 2026 EcoPonto. Projeto acadêmico de Ciência da Computação.
-          </p>
-
-        </div>
-
-      </footer>
-
+      </main>
     </div>
   );
 }
