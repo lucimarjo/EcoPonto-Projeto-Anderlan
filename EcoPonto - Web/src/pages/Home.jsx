@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
+import StatCard from "../components/StatCard";
 import "../App.css";
 
 const denuncias = [
@@ -19,21 +20,14 @@ const atividades = [
 
 function Icon({ name }) {
   const icons = {
-    dashboard: "▦",
-    map: "⌖",
-    list: "☷",
-    team: "♙",
-    settings: "⚙",
-    search: "⌕",
-    bell: "♧",
     arrow: "↗",
-    clock: "◷",
-    check: "✓",
-    plus: "＋",
-    menu: "☰",
   };
 
-  return <span className="eco-icon" aria-hidden="true">{icons[name] || "•"}</span>;
+  return (
+    <span className="eco-icon" aria-hidden="true">
+      {icons[name] || "•"}
+    </span>
+  );
 }
 
 function Home() {
@@ -70,8 +64,14 @@ function Home() {
           <section className="eco-welcome">
             <div>
               <span className="eco-eyebrow">VISÃO GERAL</span>
-              <h1>{paginaAtiva === "Dashboard" ? "Central de Denúncias" : paginaAtiva}</h1>
-              <p>Acompanhe e gerencie as ocorrências ambientais da sua cidade.</p>
+              <h1>
+                {paginaAtiva === "Dashboard"
+                  ? "Central de Denúncias"
+                  : paginaAtiva}
+              </h1>
+              <p>
+                Acompanhe e gerencie as ocorrências ambientais da sua cidade.
+              </p>
             </div>
 
             <select
@@ -86,56 +86,48 @@ function Home() {
             </select>
           </section>
 
+          {/* INDICADORES */}
           <section className="eco-kpi-grid">
-            <article className="eco-kpi-card">
-              <div className="eco-kpi-top">
-                <span>Novas denúncias</span>
-                <div className="eco-kpi-icon green"><Icon name="plus" /></div>
-              </div>
-              <strong>128</strong>
-              <div className="eco-kpi-footer">
-                <span className="eco-positive">↑ 12,5%</span>
-                <span>em relação ao período anterior</span>
-              </div>
-            </article>
+            <StatCard
+              titulo="Novas denúncias"
+              valor="128"
+              icone="＋"
+              cor="green"
+              variacao="↑ 12,5%"
+              descricao="em relação ao período anterior"
+            />
 
-            <article className="eco-kpi-card">
-              <div className="eco-kpi-top">
-                <span>Em análise</span>
-                <div className="eco-kpi-icon orange"><Icon name="clock" /></div>
-              </div>
-              <strong>36</strong>
-              <div className="eco-kpi-footer">
-                <span className="eco-neutral">Aguardando</span>
-                <span>providências da equipe</span>
-              </div>
-            </article>
+            <StatCard
+              titulo="Em análise"
+              valor="36"
+              icone="◷"
+              cor="orange"
+              variacao="Aguardando"
+              descricao="providências da equipe"
+              tipoVariacao="neutral"
+            />
 
-            <article className="eco-kpi-card">
-              <div className="eco-kpi-top">
-                <span>Denúncias resolvidas</span>
-                <div className="eco-kpi-icon blue"><Icon name="check" /></div>
-              </div>
-              <strong>92</strong>
-              <div className="eco-kpi-footer">
-                <span className="eco-positive">↑ 8,2%</span>
-                <span>em relação ao período anterior</span>
-              </div>
-            </article>
+            <StatCard
+              titulo="Denúncias resolvidas"
+              valor="92"
+              icone="✓"
+              cor="blue"
+              variacao="↑ 8,2%"
+              descricao="em relação ao período anterior"
+            />
 
-            <article className="eco-kpi-card">
-              <div className="eco-kpi-top">
-                <span>Tempo médio de resolução</span>
-                <div className="eco-kpi-icon purple"><Icon name="clock" /></div>
-              </div>
-              <strong>2,4 <small>dias</small></strong>
-              <div className="eco-kpi-footer">
-                <span className="eco-positive">↓ 15%</span>
-                <span>redução no tempo médio</span>
-              </div>
-            </article>
+            <StatCard
+              titulo="Tempo médio de resolução"
+              valor="2,4"
+              unidade="dias"
+              icone="◷"
+              cor="purple"
+              variacao="↓ 15%"
+              descricao="redução no tempo médio"
+            />
           </section>
 
+          {/* GRÁFICOS */}
           <section className="eco-charts-grid">
             <article className="eco-panel eco-evolution">
               <div className="eco-panel-heading">
@@ -143,7 +135,9 @@ function Home() {
                   <h2>Visão geral das denúncias</h2>
                   <p>Acompanhe a evolução das ocorrências.</p>
                 </div>
-                <span className="eco-chart-legend"><i /> Denúncias recebidas</span>
+                <span className="eco-chart-legend">
+                  <i /> Denúncias recebidas
+                </span>
               </div>
 
               <div className="eco-bar-chart">
@@ -157,7 +151,9 @@ function Home() {
 
                 <div className="eco-chart-area">
                   <div className="eco-chart-lines">
-                    {[1, 2, 3, 4, 5].map((line) => <span key={line} />)}
+                    {[1, 2, 3, 4, 5].map((line) => (
+                      <span key={line} />
+                    ))}
                   </div>
 
                   <div className="eco-bars">
@@ -172,7 +168,10 @@ function Home() {
                     ].map(([dia, altura]) => (
                       <div className="eco-bar-column" key={dia}>
                         <div className="eco-bar-track">
-                          <div className="eco-bar" style={{ height: `${altura}%` }} />
+                          <div
+                            className="eco-bar"
+                            style={{ height: `${altura}%` }}
+                          />
                         </div>
                         <span>{dia}</span>
                       </div>
@@ -200,13 +199,26 @@ function Home() {
               </div>
 
               <div className="eco-status-legend">
-                <div><i className="status-green" /><span>Resolvidas</span><strong>72%</strong></div>
-                <div><i className="status-orange" /><span>Em análise</span><strong>20%</strong></div>
-                <div><i className="status-gray" /><span>Novas</span><strong>8%</strong></div>
+                <div>
+                  <i className="status-green" />
+                  <span>Resolvidas</span>
+                  <strong>72%</strong>
+                </div>
+                <div>
+                  <i className="status-orange" />
+                  <span>Em análise</span>
+                  <strong>20%</strong>
+                </div>
+                <div>
+                  <i className="status-gray" />
+                  <span>Novas</span>
+                  <strong>8%</strong>
+                </div>
               </div>
             </article>
           </section>
 
+          {/* DENÚNCIAS E ATIVIDADES */}
           <section className="eco-bottom-grid">
             <article className="eco-panel eco-recent">
               <div className="eco-panel-heading">
@@ -214,6 +226,7 @@ function Home() {
                   <h2>Denúncias recentes</h2>
                   <p>Acompanhe as últimas ocorrências registradas.</p>
                 </div>
+
                 <button
                   className="eco-text-button"
                   onClick={() => setPaginaAtiva("Lista de denúncias")}
@@ -237,12 +250,18 @@ function Home() {
                   <tbody>
                     {denunciasFiltradas.map((item) => (
                       <tr key={item.id}>
-                        <td><strong className="eco-id">{item.id}</strong></td>
+                        <td>
+                          <strong className="eco-id">{item.id}</strong>
+                        </td>
                         <td>{item.local}</td>
                         <td>{item.categoria}</td>
                         <td>{item.data}</td>
                         <td>
-                          <span className={`eco-status status-${item.status.toLowerCase().replace(" ", "-")}`}>
+                          <span
+                            className={`eco-status status-${item.status
+                              .toLowerCase()
+                              .replace(" ", "-")}`}
+                          >
                             {item.status}
                           </span>
                         </td>
@@ -272,7 +291,9 @@ function Home() {
               <div className="eco-activity-list">
                 {atividades.map((atividade, index) => (
                   <div className="eco-activity-item" key={index}>
-                    <div className="eco-activity-icon">{atividade.icon}</div>
+                    <div className="eco-activity-icon">
+                      {atividade.icon}
+                    </div>
                     <div>
                       <strong>{atividade.titulo}</strong>
                       <p>{atividade.descricao}</p>
@@ -285,8 +306,12 @@ function Home() {
           </section>
 
           <footer className="eco-footer">
-            <span>© 2026 EcoPonto — Sistema de Gestão Ambiental</span>
-            <span>Juntos por uma cidade mais limpa <b>♥</b></span>
+            <span>
+              © 2026 EcoPonto — Sistema de Gestão Ambiental
+            </span>
+            <span>
+              Juntos por uma cidade mais limpa <b>♥</b>
+            </span>
           </footer>
         </div>
       </main>
