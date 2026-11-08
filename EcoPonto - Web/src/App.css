@@ -2493,3 +2493,111 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+
+/* CORREÇÃO DE LARGURA E RESPONSIVIDADE DA LISTA DE DENÚNCIAS */
+.eco-list-page,
+.eco-list-page *,
+.eco-list-page *::before,
+.eco-list-page *::after {
+  box-sizing: border-box;
+}
+
+.eco-list-page {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 26px 24px;
+  overflow-x: hidden;
+}
+
+.eco-list-heading {
+  width: 100%;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.eco-list-heading > div {
+  min-width: 0;
+}
+
+.eco-new-report-button {
+  flex: 0 0 auto;
+  max-width: 100%;
+}
+
+.eco-list-filters {
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1.7fr) repeat(4, minmax(0, 1fr)) auto;
+}
+
+.eco-list-search,
+.eco-list-filters select {
+  min-width: 0;
+}
+
+.eco-list-table-panel {
+  width: 100%;
+  min-width: 0;
+}
+
+.eco-list-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+@media (max-width: 1150px) {
+  .eco-list-filters {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .eco-list-search {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 850px) {
+  .eco-list-page {
+    padding: 22px 18px;
+  }
+
+  .eco-list-heading {
+    align-items: flex-start;
+  }
+
+  .eco-list-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .eco-list-search {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .eco-list-page {
+    padding: 20px 14px;
+  }
+
+  .eco-list-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .eco-list-filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .eco-list-search {
+    grid-column: auto;
+  }
+
+  .eco-list-table-heading,
+  .eco-list-pagination {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+}
