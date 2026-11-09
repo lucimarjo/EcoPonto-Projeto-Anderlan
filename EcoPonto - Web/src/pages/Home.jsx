@@ -8,6 +8,7 @@ import ChartEvolution from "../components/ChartEvolution";
 import ChartStatus from "../components/ChartStatus";
 import MapPage from "../components/MapPage";
 import ListPage from "../components/ListPage";
+import TeamsPage from "../components/TeamsPage";
 
 import "../App.css";
 
@@ -50,7 +51,7 @@ const atividades = [
     tempo: "Há 15 minutos",
   },
   {
-    icon: "+",
+    icon: "＋",
     titulo: "Nova denúncia recebida",
     descricao: "Uma nova ocorrência foi registrada.",
     tempo: "Há 42 minutos",
@@ -109,6 +110,8 @@ function Home() {
           <MapPage />
         ) : paginaAtiva === "Lista de denúncias" ? (
           <ListPage />
+        ) : paginaAtiva === "Gestão de equipes" ? (
+          <TeamsPage />
         ) : (
           <div className="eco-content">
             <section className="eco-welcome">
@@ -143,7 +146,7 @@ function Home() {
               <StatCard
                 titulo="Novas denúncias"
                 valor="128"
-                icone="+"
+                icone="＋"
                 cor="green"
                 variacao="↑ 12,5%"
                 descricao="em relação ao período anterior"
@@ -191,9 +194,7 @@ function Home() {
                 <div className="eco-panel-heading">
                   <div>
                     <h2>Denúncias recentes</h2>
-                    <p>
-                      Acompanhe as últimas ocorrências registradas.
-                    </p>
+                    <p>Acompanhe as últimas ocorrências registradas.</p>
                   </div>
 
                   <button
