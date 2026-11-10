@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EcoPonto - Mapa de Coleta</title>
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>EcoPonto</h1>
+        <p>Mapa de pontos de coleta de resíduos</p>
+    </header>
+
+    <main>
+        <section id="busca-endereco">
+            <h2>Localizar denúncia</h2>
+
+            <p>
+                Informe o endereço onde ocorreu o descarte irregular:
+            </p>
+
+            <form id="form-denuncia">
+                <input
+                    type="text"
+                    id="endereco-denuncia"
+                    placeholder="Digite o endereço da denúncia..."
+                    required
+                >
+
+                <button type="submit">
+                    Encontrar ponto mais próximo
+                </button>
+            </form>
+
+            <div id="resultado-rota"></div>
+        </section>
+
+        <div id="mapa"></div>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/static/mapa.js"></script>
+
+</body>
+</html>

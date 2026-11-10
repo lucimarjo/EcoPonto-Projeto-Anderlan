@@ -1,0 +1,165 @@
+[
+    {
+        "id": 1,
+        "nome": "Ecoponto Pajuçara",
+        "tipo": "ECOPONTO",
+        "bairro": "Pajuçara",
+        "endereco": "Rua Luiz Campos Teixeira, 476",
+        "cidade": "Maceió",
+        "estado": "AL",
+        "latitude": -9.661771733469841,
+        "longitude": -35.71328838186188,
+        "materiais_aceitos": [
+            "entulho de construção",
+            "móveis",
+            "eletrodomésticos",
+            "restos de poda",
+            "materiais recicláveis"
+        ],
+        "status": "PENDENTE_VALIDACAO",
+        "fonte": "https://maceio.al.gov.br/p/alurb/ecopontos"
+        
+    },
+    {
+        "id": 2,
+        "nome": "Ecoponto Tabuleiro",
+        "tipo": "ECOPONTO",
+        "bairro": "Tabuleiro do Martins",
+        "endereco": "Rua Botafogo, por trás do Posto de Saúde Dr. Ib Gatto Falcão",
+        "cidade": "Maceió",
+        "estado": "AL",
+        "latitude": -9.5930158639651,
+        "longitude": -35.76844075054804,
+        "materiais_aceitos": [
+            "entulho de construção",
+            "móveis",
+            "eletrodomésticos",
+            "restos de poda",
+            "materiais recicláveis"
+        ],
+        "status": "PENDENTE_VALIDACAO",
+        "fonte": "https://maceio.al.gov.br/p/alurb/ecopontos"
+    },
+    {
+        "id": 3,
+        "nome": "Ecoponto Dique Estrada",
+        "tipo": "ECOPONTO",
+        "bairro": "Vergel do Lago",
+        "endereco": "Avenida Governador Teobaldo Barbosa",
+        "cidade": "Maceió",
+        "estado": "AL",
+        "latitude": -9.660417922007108,
+        "longitude": -35.76103244189126,
+        "materiais_aceitos": [
+            "entulho de construção",
+            "móveis",
+            "eletrodomésticos",
+            "restos de poda",
+            "materiais recicláveis"
+        ],
+        "status": "PENDENTE_VALIDACAO",
+        "fonte": "https://maceio.al.gov.br/p/alurb/ecopontos"
+    },
+    {
+        "id": 4,
+        "nome": "Ecoponto Santa Lúcia",
+        "tipo": "ECOPONTO",
+        "bairro": "Santa Lúcia",
+        "endereco": "Avenida Oswaldo Ramos, 912, Jardim Petrópolis",
+        "cidade": "Maceió",
+        "estado": "AL",
+        "latitude": -9.583796134596442,
+        "longitude": -35.74942944034907,
+        "materiais_aceitos": [
+            "entulho de construção",
+            "móveis",
+            "eletrodomésticos",
+            "restos de poda",
+            "materiais recicláveis"
+        ],
+        "status": "PENDENTE_VALIDACAO",
+        "fonte": "https://maceio.al.gov.br/p/alurb/ecopontos"
+        
+    },
+    {
+        "id": 5,
+        "nome": "Ecoponto Gruta de Lourdes",
+        "tipo": "ECOPONTO",
+        "bairro": "Gruta de Lourdes",
+        "endereco": "Rua Antônio Menezes de Araújo Lemos, 143",
+        "cidade": "Maceió",
+        "estado": "AL",
+        "latitude": -9.617915413697329,
+        "longitude": -35.73430793600002,
+        "materiais_aceitos": [
+            "entulho de construção",
+            "móveis",
+            "eletrodomésticos",
+            "restos de poda",
+            "materiais recicláveis"
+        ],
+        "status": "PENDENTE_VALIDACAO",
+        "fonte": "https://maceio.al.gov.br/p/alurb/ecopontos"
+    },
+    {
+        "id": 6,
+        "nome": "Ecoponto Santa Maria",
+        "tipo": "ECOPONTO",
+        "bairro": "Cidade Universitária",
+        "endereco": "Avenida Lourival Melo Mota, Conjunto Santa Maria, s/n",
+        "cidade": "Maceió",
+        "estado": "AL",
+        "latitude": -9.539496279693662,
+        "longitude": -35.79125764959883,
+        "materiais_aceitos": [
+            "entulho de construção",
+            "móveis",
+            "eletrodomésticos",
+            "restos de poda",
+            "materiais recicláveis"
+        ],
+        "status": "PENDENTE_VALIDACAO",
+        "fonte": "https://maceio.al.gov.br/p/alurb/ecopontos"
+    },
+    {
+        "id": 7,
+        "nome": "PDR Feitosa",
+        "tipo": "PDR",
+        "bairro": "Feitosa",
+        "endereco": "Avenida Juca Sampaio E, Feitosa, Maceió - AL",
+        "cidade": "Maceió",
+        "estado": "AL",
+        "latitude": -9.628519221767567,
+        "longitude": -35.71726920817709,
+        "materiais_aceitos": [
+            "entulho de construção",
+            "móveis",
+            "eletrodomésticos",
+            "restos de poda",
+            "materiais recicláveis"
+        ],
+        "status": "PENDENTE_VALIDACAO",
+        "fonte": "https://maceio.al.gov.br/p/alurb/ecopontos"
+    },
+    {
+        "id": 8,
+        "nome": "Ecoponto Petrópolis",
+        "tipo": "ECOPONTO",
+        "bairro": "Petrópolis",
+        "endereco": "Avenida Jorge de Lima, após o Residencial Parque Petrópolis III",
+        "cidade": "Maceió",
+        "estado": "AL",
+        "latitude": -9.608676853597437,
+        "longitude": -35.74812375301501,
+        "materiais_aceitos": [
+            "entulho de construção",
+            "móveis",
+            "eletrodomésticos",
+            "restos de poda",
+            "materiais recicláveis"
+        ],
+        "status": "PENDENTE_VALIDACAO",
+        "fonte": "https://maceio.al.gov.br/p/alurb/ecopontos"
+       
+    }
+]
