@@ -105,46 +105,6 @@ def analisar_enderecos(
             detail="Erro ao consultar o OpenStreetMap"
         )
 
-@router.get("/ponto-mais-proximo")
-def ponto_mais_proximo(
-    denuncia_lat: float = Query(ge=-90, le=90),
-    denuncia_lon: float = Query(ge=-180, le=180),
-    raio_metros: float = Query(default=500, gt=0)
-):
-
-    resultado = encontrar_ponto_mais_proximo(
-        denuncia_lat,
-        denuncia_lon
-    )
-
-    if resultado is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Nenhum ponto de coleta com coordenadas cadastrado"
-        )
-
-    ponto = resultado["ponto"]
-    distancia = resultado["distancia_metros"]
-
-    return {
-        "denuncia": {
-            "latitude": denuncia_lat,
-            "longitude": denuncia_lon
-        },
-        "ponto_mais_proximo": {
-            "id": ponto["id"],
-            "nome": ponto["nome"],
-            "bairro": ponto["bairro"],
-            "endereco": ponto["endereco"],
-            "latitude": ponto["latitude"],
-            "longitude": ponto["longitude"],
-            "status": ponto["status"]
-        },
-        "distancia_metros": round(distancia, 2),
-        "raio_metros": raio_metros,
-        "dentro_do_raio": distancia <= raio_metros
-    }
-
 @router.get("/ponto-mais-proximo-endereco")
 def ponto_mais_proximo_endereco(
     endereco: str = Query(min_length=5),
