@@ -31,6 +31,9 @@ def localizar(endereco: str = Query(min_length=3)):
             status_code=502,
             detail="Erro ao consultar o OpenStreetMap"
         )
+    
+# Analisa dois endereços: um referente ao ponto de coleta e outro ao local da denúncia.
+# Calcula a distância aproximada, em metros, entre os dois locais.
 
 @router.get("/analisar-enderecos")
 def analisar_enderecos(
