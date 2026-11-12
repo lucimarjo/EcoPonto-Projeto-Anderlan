@@ -2,12 +2,12 @@
 
 Será a interface do usuário final, dando acesso aos serviços de coleta e descarte.
 
-## 🎯 Responsável por:
+## 🎯 Responsabilidades do Painel:
 
-- Geolocalização e mapas;
-- Envio de denúncias;
-- Consulta de coleta;
-- Pontos de descarte
+- **Geolocalização e mapas**
+- **Envio de denúncias**
+- **Consulta de coleta**
+- **Pontos de descarte**
 
 ## 🤔 Por que escolhemos
 

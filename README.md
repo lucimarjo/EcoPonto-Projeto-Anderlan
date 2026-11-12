@@ -92,24 +92,11 @@ A estrutura principal do projeto será organizada da seguinte maneira:
 
 ```text
 EcoPonto-Projeto-Anderlan/
-│
-├── .vscode/
-│
-├── public/
-│
-├── src/                      # Código-fonte da aplicação
-│   ├── assets/               # Imagens, logotipos e outros recursos
-│   ├── components/           # Componentes reutilizáveis da interface
-│   ├── views/                # Telas e páginas da aplicação
-│   ├── App.vue               # Componente principal da aplicação
-│   ├── main.js               # Ponto de entrada da aplicação
-│   └── style.css             # Estilos globais
-│
-├── .gitignore
-├── eslint.config.js
-├── index.html                # Página HTML principal
-├── package.json
-├── package-lock.json
-├── vite.config.js
-└── README.md                 # Documentação do projeto
+└── src/
+    ├── back-ends/
+    │   ├── Java
+    │   └── Python
+    └── front-ends/
+        ├── mobile-Kotlin
+        └── web-JS
 ```
