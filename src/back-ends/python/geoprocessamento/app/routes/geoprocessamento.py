@@ -32,28 +32,6 @@ def localizar(endereco: str = Query(min_length=3)):
             detail="Erro ao consultar o OpenStreetMap"
         )
 
-@router.get("/analisar-distancia")
-def analisar_distancia(
-    denuncia_lat: float = Query(ge=-90, le=90),
-    denuncia_lon: float = Query(ge=-180, le=180),
-    coleta_lat: float = Query(ge=-90, le=90),
-    coleta_lon: float = Query(ge=-180, le=180),
-    raio_metros: float = Query(default=500, gt=0)
-):
-
-    distancia = calcular_distancia(
-        denuncia_lat,
-        denuncia_lon,
-        coleta_lat,
-        coleta_lon
-    )
-
-    return {
-        "distancia_metros": round(distancia, 2),
-        "raio_metros": raio_metros,
-        "dentro_do_raio": distancia <= raio_metros
-    }
-
 @router.get("/analisar-enderecos")
 def analisar_enderecos(
     endereco_denuncia: str = Query(min_length=3),
