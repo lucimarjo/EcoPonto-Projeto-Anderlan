@@ -31,12 +31,18 @@
             </p>
 
             <form id="form-denuncia">
-                <input
-                    type="text"
-                    id="endereco-denuncia"
-                    placeholder="Digite o endereço da denúncia..."
-                    required
-                >
+                <div class="campo-endereco-container">
+                    <input
+                        type="text"
+                        id="endereco-denuncia"
+                        placeholder="Digite o endereço da denúncia..."
+                        required
+                    >
+
+                    <button type="button" id="btn-localizacao">
+                        📍 Usar minha localização
+                    </button>
+                </div>
 
                 <button type="submit">
                     Encontrar ponto mais próximo

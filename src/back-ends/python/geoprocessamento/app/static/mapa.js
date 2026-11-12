@@ -1,13 +1,10 @@
 
-
 // 1. INICIALIZAÇÃO DO MAPA
-
 
 const mapa = L.map('mapa').setView(
     [-9.6498, -35.7089],
     12
 );
-
 
 // Adiciona o OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -15,9 +12,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(mapa);
 
 
-
 // 2. CAMADAS E MARCADORES
-
 
 const marcadores = L.layerGroup().addTo(mapa);
 
@@ -26,9 +21,7 @@ let marcadorDestino = null;
 let camadaRota = null;
 
 
-
 // 3. CARREGAR PONTOS DE COLETA
-
 
 async function carregarPontosColeta() {
 
@@ -48,7 +41,6 @@ async function carregarPontosColeta() {
 
         dados.pontos_coleta.forEach(ponto => {
 
-            // Ignora pontos sem coordenadas
             if (
                 ponto.latitude == null ||
                 ponto.longitude == null
@@ -56,7 +48,6 @@ async function carregarPontosColeta() {
                 return;
             }
 
-            // Cria marcador do ponto de coleta
             const marcador = L.marker([
                 ponto.latitude,
                 ponto.longitude
@@ -81,9 +72,211 @@ async function carregarPontosColeta() {
 }
 
 
+// 4. CONSULTAR API
 
-// 4. PESQUISAR ENDEREÇO DA DENÚNCIA
+async function consultarPontoMaisProximo(url) {
 
+    const resposta = await fetch(url);
+
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(
+            dados.detail || 'Não foi possível encontrar o ponto de coleta.'
+        );
+    }
+
+    return dados;
+
+}
+
+
+// 5. REMOVER PESQUISA ANTERIOR
+
+function limparPesquisaAnterior() {
+
+    if (camadaRota) {
+        mapa.removeLayer(camadaRota);
+        camadaRota = null;
+    }
+
+    if (marcadorDenuncia) {
+        mapa.removeLayer(marcadorDenuncia);
+        marcadorDenuncia = null;
+    }
+
+    if (marcadorDestino) {
+        mapa.removeLayer(marcadorDestino);
+        marcadorDestino = null;
+    }
+
+}
+
+
+// 6. EXIBIR MARCADORES E CALCULAR ROTA
+
+async function exibirResultado(dados) {
+
+    const denuncia = dados.denuncia;
+    const ponto = dados.ponto_mais_proximo;
+
+    const resultado = document.getElementById('resultado-rota');
+
+    limparPesquisaAnterior();
+
+    // 6.1 MARCADOR DA LOCALIZAÇÃO DO USUÁRIO
+
+    marcadorDenuncia = L.marker([
+        denuncia.latitude,
+        denuncia.longitude
+    ]).addTo(mapa);
+
+    marcadorDenuncia.bindPopup(`
+        <h3>Local da denúncia</h3>
+        <p>${denuncia.endereco}</p>
+    `);
+
+
+    // 6.2 MARCADOR DO PONTO DE COLETA
+
+    marcadorDestino = L.marker([
+        ponto.latitude,
+        ponto.longitude
+    ]).addTo(mapa);
+
+    marcadorDestino.bindPopup(`
+        <h3>${ponto.nome}</h3>
+        <p><strong>Bairro:</strong> ${ponto.bairro}</p>
+        <p><strong>Status:</strong> ${ponto.status}</p>
+    `);
+
+
+    // 6.3 CONSULTAR ROTA COM OSRM
+
+    const coordenadas = [
+        `${denuncia.longitude},${denuncia.latitude}`,
+        `${ponto.longitude},${ponto.latitude}`
+    ].join(';');
+
+    const urlRota =
+        `https://router.project-osrm.org/route/v1/driving/${coordenadas}?overview=full&geometries=geojson`;
+
+    const respostaRota = await fetch(urlRota);
+
+    if (!respostaRota.ok) {
+        throw new Error(
+            'Não foi possível consultar o serviço de rotas.'
+        );
+    }
+
+    const dadosRota = await respostaRota.json();
+
+    if (
+        dadosRota.code !== 'Ok' ||
+        !dadosRota.routes ||
+        dadosRota.routes.length === 0
+    ) {
+        throw new Error('Nenhuma rota foi encontrada.');
+    }
+
+    const rota = dadosRota.routes[0];
+
+
+    // 6.4 DESENHAR ROTA NO MAPA
+
+    camadaRota = L.geoJSON(rota.geometry, {
+
+        style: {
+            color: '#198754',
+            weight: 6,
+            opacity: 0.85
+        }
+
+    }).addTo(mapa);
+
+
+    // Ajustar o zoom para mostrar o percurso
+
+    const limites = L.featureGroup([
+        camadaRota,
+        marcadorDenuncia,
+        marcadorDestino
+    ]);
+
+    mapa.fitBounds(limites.getBounds(), {
+        padding: [40, 40]
+    });
+
+
+    // 6.5 CALCULAR DISTÂNCIA E TEMPO DA ROTA
+
+    const distanciaKm = (
+        rota.distance / 1000
+    ).toFixed(2);
+
+    const duracaoMinutos = Math.round(
+        rota.duration / 60
+    );
+
+
+    // 6.6 EXIBIR RESULTADO
+
+    resultado.innerHTML = `
+
+        <div class="resultado-card">
+
+            <h3>📍 Ponto de coleta mais próximo encontrado!</h3>
+
+            <div class="resultado-grid">
+
+                <div class="info-item">
+                    <span>Nome do ponto</span>
+                    <strong>${ponto.nome}</strong>
+                </div>
+
+                <div class="info-item">
+                    <span>Bairro</span>
+                    <strong>${ponto.bairro}</strong>
+                </div>
+
+                <div class="info-item">
+                    <span>Endereço</span>
+                    <strong>${ponto.endereco}</strong>
+                </div>
+
+                <div class="info-item">
+                    <span>Status de validação</span>
+                    <strong class="status-pendente">
+                        ${ponto.status}
+                    </strong>
+                </div>
+
+            </div>
+
+            <div class="resultado-rota-info">
+
+                <div class="rota-dado">
+                    <span>Distância pela rota</span>
+                    <strong>${distanciaKm} km</strong>
+                </div>
+
+                <div class="rota-dado">
+                    <span>Tempo estimado de carro</span>
+                    <strong>${duracaoMinutos} min</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+    marcadorDestino.openPopup();
+
+}
+
+
+// 7. PESQUISAR ENDEREÇO MANUALMENTE
 
 document.getElementById('form-denuncia').addEventListener(
     'submit',
@@ -98,9 +291,7 @@ document.getElementById('form-denuncia').addEventListener(
         const resultado = document.getElementById('resultado-rota');
 
         if (!endereco) {
-
             resultado.textContent = 'Informe um endereço válido.';
-
             return;
         }
 
@@ -109,204 +300,16 @@ document.getElementById('form-denuncia').addEventListener(
 
         try {
 
-            
-            // 4.1 CONSULTAR A API
-            
-
-            const resposta = await fetch(
-                `/geoprocessamento/ponto-mais-proximo-endereco?endereco=${encodeURIComponent(endereco)}&raio_metros=500`
-            );
-
-            const dados = await resposta.json();
-
-            if (!resposta.ok) {
-
-                throw new Error(
-                    dados.detail || 'Não foi possível localizar o endereço.'
-                );
-
-            }
-
-            const denuncia = dados.denuncia;
-            const ponto = dados.ponto_mais_proximo;
-
-            
-            // 4.2 REMOVER PESQUISA ANTERIOR
-            
-
-            if (camadaRota) {
-                mapa.removeLayer(camadaRota);
-                camadaRota = null;
-            }
-
-            if (marcadorDenuncia) {
-                mapa.removeLayer(marcadorDenuncia);
-                marcadorDenuncia = null;
-            }
-
-            if (marcadorDestino) {
-                mapa.removeLayer(marcadorDestino);
-                marcadorDestino = null;
-            }
-
-            
-            // 4.3 MARCADOR DA DENÚNCIA
-            
-
-            marcadorDenuncia = L.marker([
-                denuncia.latitude,
-                denuncia.longitude
-            ]).addTo(mapa);
-
-            marcadorDenuncia.bindPopup(`
-                <h3>Local da denúncia</h3>
-                <p>${endereco}</p>
-            `);
-
-            
-            // 4.4 MARCADOR DO PONTO DE COLETA
-            
-
-            marcadorDestino = L.marker([
-                ponto.latitude,
-                ponto.longitude
-            ]).addTo(mapa);
-
-            marcadorDestino.bindPopup(`
-                <h3>${ponto.nome}</h3>
-                <p><strong>Bairro:</strong> ${ponto.bairro}</p>
-                <p><strong>Status:</strong> ${ponto.status}</p>
-            `);
-
-            
-            // 4.5 CALCULAR ROTA COM OSRM
-            
-
-            const coordenadas = [
-                `${denuncia.longitude},${denuncia.latitude}`,
-                `${ponto.longitude},${ponto.latitude}`
-            ].join(';');
-
-            const urlRota =
-                `https://router.project-osrm.org/route/v1/driving/${coordenadas}?overview=full&geometries=geojson`;
-
-            const respostaRota = await fetch(urlRota);
-
-            if (!respostaRota.ok) {
-
-                throw new Error(
-                    'Não foi possível consultar o serviço de rotas.'
-                );
-
-            }
-
-            const dadosRota = await respostaRota.json();
-
-            if (
-                dadosRota.code !== 'Ok' ||
-                !dadosRota.routes ||
-                dadosRota.routes.length === 0
-            ) {
-
-                throw new Error('Nenhuma rota foi encontrada.');
-
-            }
-
-            const rota = dadosRota.routes[0];
-
-            
-            // 4.6 DESENHAR ROTA NO MAPA
-            
-
-            camadaRota = L.geoJSON(rota.geometry, {
-
-                style: {
-                    color: '#198754',
-                    weight: 6,
-                    opacity: 0.85
-                }
-
-            }).addTo(mapa);
-
-            // Ajusta o zoom para mostrar todo o percurso
-            const limites = L.featureGroup([
-                camadaRota,
-                marcadorDenuncia,
-                marcadorDestino
-            ]);
-
-            mapa.fitBounds(limites.getBounds(), {
-                padding: [40, 40]
+            const parametros = new URLSearchParams({
+                endereco: endereco,
+                raio_metros: 500
             });
 
-            
-            // 4.7 CALCULAR DISTÂNCIA E TEMPO
-            
-
-            const distanciaKm = (
-                rota.distance / 1000
-            ).toFixed(2);
-
-            const duracaoMinutos = Math.round(
-                rota.duration / 60
+            const dados = await consultarPontoMaisProximo(
+                `/geoprocessamento/ponto-mais-proximo-endereco?${parametros}`
             );
 
-            
-            // 4.8 EXIBIR RESULTADO FORMATADO
-            
-
-            resultado.innerHTML = `
-
-                <div class="resultado-card">
-
-                    <h3>📍 Ponto de coleta mais proximo da sua localidade encontrado!!</h3>
-
-                    <div class="resultado-grid">
-
-                        <div class="info-item">
-                            <span>Nome do ponto</span>
-                            <strong>${ponto.nome}</strong>
-                        </div>
-
-                        <div class="info-item">
-                            <span>Bairro</span>
-                            <strong>${ponto.bairro}</strong>
-                        </div>
-
-                        <div class="info-item">
-                            <span>Endereço</span>
-                            <strong>${ponto.endereco}</strong>
-                        </div>
-
-                        <div class="info-item">
-                            <span>Status de validação</span>
-                            <strong class="status-pendente">
-                                ${ponto.status}
-                            </strong>
-                        </div>
-
-                    </div>
-
-                    <div class="resultado-rota-info">
-
-                        <div class="rota-dado">
-                            <span>Distância pela rota</span>
-                            <strong>${distanciaKm} km</strong>
-                        </div>
-
-                        <div class="rota-dado">
-                            <span>Tempo estimado de carro</span>
-                            <strong>${duracaoMinutos} min</strong>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            `;
-
-            // Abre o popup do ponto de coleta
-            marcadorDestino.openPopup();
+            await exibirResultado(dados);
 
         } catch (erro) {
 
@@ -321,8 +324,131 @@ document.getElementById('form-denuncia').addEventListener(
 );
 
 
+// 8. UTILIZAR LOCALIZAÇÃO ATUAL
 
-// 5. CARREGAR PONTOS AO ABRIR A PÁGINA
+document.getElementById('btn-localizacao').addEventListener(
+    'click',
+    function() {
 
+        const resultado = document.getElementById('resultado-rota');
+        const botao = document.getElementById('btn-localizacao');
+
+        // Verifica se o navegador oferece geolocalização
+
+        if (!navigator.geolocation) {
+
+            resultado.textContent =
+                'Seu navegador não suporta geolocalização.';
+
+            return;
+
+        }
+
+        resultado.textContent =
+            'Obtendo sua localização atual...';
+
+        botao.disabled = true;
+
+        const textoOriginal = botao.textContent;
+        botao.textContent = 'Obtendo localização...';
+
+
+        // Solicita permissão e obtém as coordenadas
+
+        navigator.geolocation.getCurrentPosition(
+
+            async function(posicao) {
+
+                try {
+
+                    const latitude = posicao.coords.latitude;
+                    const longitude = posicao.coords.longitude;
+
+                    console.log('Latitude:', latitude);
+                    console.log('Longitude:', longitude);
+
+                    resultado.textContent =
+                        'Localização encontrada! Procurando ponto de coleta...';
+
+
+                    // Envia as coordenadas para o FastAPI
+
+                    const parametros = new URLSearchParams({
+                        latitude: latitude,
+                        longitude: longitude,
+                        raio_metros: 500
+                    });
+
+                    const dados = await consultarPontoMaisProximo(
+                        `/geoprocessamento/ponto-mais-proximo-coordenadas?${parametros}`
+                    );
+
+                    // Exibe o ponto e a rota no mapa
+
+                    await exibirResultado(dados);
+
+                } catch (erro) {
+
+                    console.error('Erro na geolocalização:', erro);
+
+                    resultado.textContent = erro.message;
+
+                } finally {
+
+                    botao.disabled = false;
+                    botao.textContent = textoOriginal;
+
+                }
+
+            },
+
+            function(erro) {
+
+                let mensagem;
+
+                switch (erro.code) {
+
+                    case erro.PERMISSION_DENIED:
+                        mensagem =
+                            'Você não permitiu o acesso à sua localização.';
+                        break;
+
+                    case erro.POSITION_UNAVAILABLE:
+                        mensagem =
+                            'Não foi possível identificar sua localização.';
+                        break;
+
+                    case erro.TIMEOUT:
+                        mensagem =
+                            'O tempo para obter sua localização terminou.';
+                        break;
+
+                    default:
+                        mensagem =
+                            'Ocorreu um erro ao obter sua localização.';
+
+                }
+
+                resultado.textContent = mensagem;
+
+                botao.disabled = false;
+                botao.textContent = textoOriginal;
+
+            },
+
+            {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 0
+            }
+
+        );
+
+    }
+
+);
+
+
+// 9. CARREGAR PONTOS AO ABRIR A PÁGINA
 
 carregarPontosColeta();
