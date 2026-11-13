@@ -1,0 +1,17 @@
+.idea
+*.iws
+*.iml
+*.ipr
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+/build/
+.vscode/
+target/
+.env
+.env.*
+application-secret.properties
+application-local.properties
+erro-ecoponto.txt
